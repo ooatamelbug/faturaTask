@@ -1,0 +1,33 @@
+{
+  "name": "faturatask",
+  "version": "1.0.0",
+  "description": "task fatura nodejs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "nodemon": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ooatamelbug/faturaTask.git"
+  },
+  "keywords": [
+    "authentication"
+  ],
+  "author": "moh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ooatamelbug/faturaTask/issues"
+  },
+  "homepage": "https://github.com/ooatamelbug/faturaTask#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "validator": "^13.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
