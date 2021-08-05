@@ -5,13 +5,20 @@ exports.up = function(knex) {
     table.increments();
     table.string('title').notNullable();
     table.string('body').notNullable();
-    table.foreign('user_id').unsigned();
-    table.string('user_id').references('id').inTable('users').onDelete(setNull).onUpdate(setNull);
-    table.foreign('admin_id').unsigned();
-    table.string('admin_id').references('id').inTable('admins').onDelete(setNull).onUpdate(setNull);
+    table.integer('user_id')
+      .references('id')
+      .inTable('users')
+      .nullable()
+      .onDelete('SET NULL')
+      .onUpdate('SET NULL');
+    table.integer('admin_id')
+      .references('id')
+      .inTable('admins')
+      .nullable()
+      .onDelete('SET NULL')
+      .onUpdate('SET NULL');
     table.boolean('status').notNullable().default(false);
-    table.timestamp('created_at').defaultTo(knex.fn.now());
-    table.timestamp('updated_at').defaultTo(knex.fn.now());
+    table.timestamp(true, true);
   });
 };
 
