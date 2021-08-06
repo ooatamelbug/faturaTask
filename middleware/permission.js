@@ -1,18 +1,33 @@
-// require jwt 
-const jwt = require('jsonwebtoken');
-// require secret from config
-const secret = '';
+// require knex file
+const knex = require('../databases/knex');
 
 const isPermission = async (adminId, permission) => {
     // get admin data from admin table
-    const admin = req.headers.Autherization;
-    // check if it has token
-    if (token){
+    const admin = await knex.select()
+                            .from('admins')
+                            .where('id', adminId);
+    // check if it has account
+    if (admin){
         try{
             // sure if give user have this permission
-            const decoded = await jwt.verify(token, secret);
-            // put data from decoded to req
-            req.user = decoded;
+            const permissionForUser = await knex.select(
+                                        'p.name as pname'
+                                    )
+                                    .from('adminpermissions AS ap')
+                                    .innerJoin('permissions AS p', 'ap.permission_id', 'p.id')
+                                    .where('ap.admin_id', adminId);
+            const permissionName = permissionForUser.map( name => permissionForUser.pname);
+            // check if have this permission name
+            if (!permissionName.include(permission)){
+                return res
+                    .status(401)
+                    .json({
+                        success: false,
+                        message: 'not permission to this path'
+                    });    
+            }
+            // return permission ok
+            return true;
         }catch(err){
             // return status error and message in not verify
             return res
