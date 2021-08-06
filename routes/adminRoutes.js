@@ -14,7 +14,7 @@ route.get('/:id', [], controller.getOneAdmin);
 route.post('/', [], controller.createAdmin);
 
 // route of update Admins
-route.get('/update', [], controller.updateAdmin);
+route.put('/update/:adminId', [], controller.updateAdmin);
 
 // route of active Admins
 route.put('/active', [], controller.activeAdmin);
