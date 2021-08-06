@@ -154,6 +154,7 @@ class Post {
             try {
                 // get specfic data from body request
                 const { status, idPosts } = body;
+                // loop of idPosts
                 idPosts.forEach( async (post, index) => {
                     // get data Post in Posts table
                     const userData = await knex.select()

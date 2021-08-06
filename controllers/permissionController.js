@@ -1,50 +1,67 @@
-// require class Admin
-const Admin = require('../classes/Admin');
+// require class Permission
+const Permission = require('../classes/Permission');
 
-// export getAdmins function 
-exports.getAdmins = async (req, res) => {
-    // pass request query to getAdmins function from class Admin
-    const result = await Admin.getAdmins(req.query);
+// export getPermissions function 
+exports.getPermissions = async (req, res) => {
+    // pass request query to getPermissions function from class Permission
+    const result = await Permission.getPermissions(req.query);
     // pass result statusCode to response status and pass data response to json
     return res.status(result.statusCode).json(result.response);
 }
 
-// export getOneAdmin function 
-exports.getOneAdmin = async (req, res) => {
-    // pass request params to getOneAdmin function from class Admin
-    const result = await Admin.getOneAdmin(req.params.id);
+// export getPermissionAdmin function 
+exports.getPermissionAdmin = async (req, res) => {
+    // pass request params to getPermissionAdmin function from class Permission
+    const result = await Permission.getPermissionAdmin(req.params.adminId);
     // pass result statusCode to response status and pass data response to json
     return res.status(result.statusCode).json(result.response);
 }
 
-// export createAdmin function 
-exports.createAdmin = async (req, res) => {
-    // pass request body to createAdmin function from class Admin
-    const result = await Admin.createAdmin(req.body);
+// export createPermission function 
+exports.createPermission = async (req, res) => {
+    // pass request body to createPermission function from class Permission
+    const result = await Permission.createPermission(req.body);
     // pass result statusCode to response status and pass data response to json
     return res.status(result.statusCode).json(result.response);
 }
 
-// export updateAdmin function 
-exports.updateAdmin = async (req, res) => {
-    // pass request params and body to updateAdmin function from class Admin
-    const result = await Admin.updateAdmin(req.params.adminId, req.body);
+
+// export createPermissionAdmin function 
+exports.createPermissionAdmin = async (req, res) => {
+    // pass request params and body to createPermissionAdmin function from class Permission
+    const result = await Permission.createPermissionAdmin(req.params.adminId,req.body);
     // pass result statusCode to response status and pass data response to json
     return res.status(result.statusCode).json(result.response);
 }
 
-// export activeAdmin function 
-exports.activeAdmin = async (req, res) => {
-    // pass request query to activeAdmin function from class Admin
-    const result = await Admin.activeAdmin(req.user.id, req.body);
+// export updatePermission function 
+exports.updatePermission = async (req, res) => {
+    // pass request params and body to updatePermission function from class Permission
+    const result = await Permission.updatePermission(req.params.permissionId, req.body);
     // pass result statusCode to response status and pass data response to json
     return res.status(result.statusCode).json(result.response);
 }
 
-// export deleteAdmin function 
-exports.deleteAdmin = async (req, res) => {
-    // pass request query to deleteAdmin function from class Admin
-    const result = await Admin.deleteAdmin(req.body);
+// export updatePermissionAdmin function 
+exports.updatePermissionAdmin = async (req, res) => {
+    // pass request params and body to updatePermissionAdmin function from class Permission
+    const result = await Permission.updatePermissionAdmin(req.params.adminId, req.body);
+    // pass result statusCode to response status and pass data response to json
+    return res.status(result.statusCode).json(result.response);
+}
+
+// export deletePermissionAdmin function 
+exports.deletePermissionAdmin = async (req, res) => {
+    // pass request query to deletePermissionAdmin function from class Permission
+    const result = await deletePermission.deletePermissionAdmin(req.params.adminId, req.body);
+    // pass result statusCode to response status and pass data response to json
+    return res.status(result.statusCode).json(result.response);
+}
+
+// export deletePermission function 
+exports.deletePermission = async (req, res) => {
+    // pass request query to deletePermission function from class Permission
+    const result = await Permission.deletePermission(req.body);
     // pass result statusCode to response status and pass data response to json
     return res.status(result.statusCode).json(result.response);
 }

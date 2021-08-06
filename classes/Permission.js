@@ -37,7 +37,7 @@ class Permission {
 
     /**
      * get One Permission data
-     * @param {id Int} PermissionId 
+     * @param {id Int} adminId 
      */
     static async getPermissionAdmin(adminId) {
         // init stat for response 
@@ -135,7 +135,7 @@ class Permission {
      *  name String,
      * } body 
      */
-    static async updatePermission(PermissionId, body){
+    static async updatePermission(permissionId, body){
         // init stat for response 
         let response = {};
         let statusCode = 200
@@ -143,7 +143,7 @@ class Permission {
             // get data Permission in Permissions table
             const permission = await knex.select()
                                     .from('permissions')
-                                    .where('id', PermissionId).first();
+                                    .where('id', permissionId).first();
             // check if complete 
             if (!permission){
                 // change status to 404 not found and return message error 
@@ -154,7 +154,7 @@ class Permission {
                 // update Permissions data
                 await knex('Permissions')
                     .update(body)
-                    .where('id', PermissionId);
+                    .where('id', permissionId);
 
                 // return status code and response message
                 statusCode = 200;
