@@ -3,6 +3,7 @@ const route = require('express').Router();
 // require admin controller 
 const controller = require('../controllers/authController');
 // require middleware 
+const { Jwt } = require('../middleware');
 
 // route of log in user
 route.post('/user/in', [], controller.loginUser);
@@ -11,10 +12,10 @@ route.post('/user/in', [], controller.loginUser);
 route.post('/admin/in', [], controller.loginAdmin);
 
 // route of log out user
-route.post('/user/out', [], controller.logoutUser);
+route.post('/user/out', [Jwt], controller.logoutUser);
 
 // route of log out Admins
-route.post('/admin/out', [], controller.logoutAdmin);
+route.post('/admin/out', [Jwt], controller.logoutAdmin);
 
 // exports route 
 module.exports = route;

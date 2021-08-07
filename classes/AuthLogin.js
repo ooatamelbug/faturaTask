@@ -1,5 +1,6 @@
 // require knex file 
 const knex = require('../knexfile');
+const knexInvironment = require('knex')[knex.development];
 // require jwt 
 const jwt = require('jsonwebtoken');
 // require bcryptjs 
@@ -107,7 +108,10 @@ class Auth {
             // check if request body have or contain one username or email 
             if(username) {
                 // get data of user by username
-                const userData = knex.select().from('admins').where('username', username).first();
+                const userData = knex.select()
+                                    .from('admins')
+                                    .where('username', username)
+                                    .first();
                 // append userData to user viriable
                 admin = userData;
             }
@@ -133,20 +137,28 @@ class Auth {
                     });
                 
                 // change formate date time and clac expirin time
+                let logtime = knexInvironment.fn.now();
+                // or 
+                let logtimed = new Date().toISOString();
+                // or
                 let logintime = moment(new Date()).utc().format();
                 let expirin = moment(new Date()).add(config.get('jwt.expiresin'),'hours');
                 expirin.utc().format();
+                console.log(logtime);
+                console.log(logtimed);
+                console.log(logintime);
+                console.log(expirin);
                 // insert data login in authlogin 
-                const logauth = await knex('authlogin').insert({
-                    'tablename': 'admins',
-                    'token': token,
-                    'expirin': expirin,
-                    'logintime': logintime,
-                    'logouttime': NULL,
-                    'user_id': NULL,
-                    'admin_id': admin.id,
-                    'status': true
-                });
+                // const logauth = await knex('authlogin').insert({
+                //     'tablename': 'admins',
+                //     'token': token,
+                //     'expirin': expirin,
+                //     'logintime': logintime,
+                //     'logouttime': NULL,
+                //     'user_id': NULL,
+                //     'admin_id': admin.id,
+                //     'status': true
+                // });
 
                 // return status code and response message
                 statusCode = 200;

@@ -32,8 +32,11 @@ const isAuthenticated = async (req, res ,next) => {
             let now = new Date();
             now.toISOString();
 
+            // 
+            const convertDate = moment(now).isAfter(new Date(data.logintime));
             console.log(now);
             console.log(data.expirin);
+            console.log(convertDate);
             // put data from decoded to req
             req.user = decoded;
         }catch(err){
