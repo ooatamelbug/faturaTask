@@ -5,11 +5,7 @@ const bcryptjs = require('bcryptjs');
 
 // create class User for all User operations
 class User {
-
-    /**
-     * get all User data 
-     * @param {limit Int,skip Int} query 
-     */
+     
     static async getUsers(query) {
         // init stat for response 
         let response = {};

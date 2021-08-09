@@ -1,0 +1,172 @@
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+
+tags:
+  name: Users
+  description: the Users management api
+
+paths:
+  # register user
+  /api/user/register:
+    get:
+      summary: register user
+      tags: [Users]
+      description: register new user
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                description: the user first name
+              lastName:
+                type: string
+                description: the user last name
+              email:
+                type: string
+                description: the user email
+              password:
+                type: string
+                description: the user password
+              username:
+                type: string        
+      responses:
+        201:
+          description: ok     
+        404:
+          description: not exist user
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: server error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+  # get all users
+  /api/user:
+    get:
+      summary: return all user data
+      security:
+        - bearerAuth: [] 
+      tags: [Users]
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            required: true
+      responses:
+        200:
+          description: the list of user
+          schema:
+            type: array
+            items:
+              type: object 
+              properties:
+                id:
+                  type: integer
+                  description: auto genrated column
+                firstName:
+                  type: string
+                  description: the user first name
+                lastName:
+                  type: string
+                  description: the user last name
+                email:
+                  type: string
+                  description: the user email
+                username:
+                  type: string
+                  description: the user username
+                admin_id:
+                  type: string
+                  description: the admin id of active user
+                created_at:
+                  type: string
+                  description: the time of create user row
+                updated_at:
+                  type: string
+                  description: the time of update user row
+    
+        500:
+          description: server error
+    
+  # get one user
+  /api/user/{id}:
+    get:
+      summary: return one data of user
+      security:
+        - bearerAuth: []
+      description: one user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            required: true
+      tags: [Users]
+      responses:
+        200:
+          description: get user by id
+          schema:
+            type: object 
+            properties:
+              id:
+                type: integer
+                description: auto genrated column
+              firstName:
+                type: string
+                description: the user first name
+              lastName:
+                type: string
+                description: the user last name
+              email:
+                type: string
+                format: email
+                description: the user email
+              username:
+                type: string
+                description: the user username
+              admin_id:
+                type: string
+                description: the admin id of active user
+              created_at:
+                type: string
+                description: the time of create user row
+              updated_at:
+                type: string
+                description: the time of update user row
+        404:
+          description: not exist user
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: server error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

@@ -5,7 +5,7 @@ const controller = require('../controllers/userController');
 // require middleware 
 const { Jwt, Permission } = require('../middleware');
 
-// route of get Users
+// route of get all Users
 route.get('/', [
     Jwt,
     Permission('users:read')
@@ -18,8 +18,7 @@ route.get('/:id', [
 ], controller.getOneUser);
 
 // route of create Users
-route.post('/', [
-    Jwt
+route.post('/register', [
 ], controller.registerUser);
 
 // route of update Users

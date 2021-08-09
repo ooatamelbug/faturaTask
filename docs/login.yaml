@@ -1,0 +1,109 @@
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+
+tags:
+    name: Login
+    description: the Users management api
+
+
+paths:
+  /api/auth/user/in:
+    post:
+      summary: return of token of user
+      description: login user
+      tags: [Login]  
+      produces:
+        - application/json
+      consumes:
+        - application/json    
+      parameters:
+        - in: body
+          name: user
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
+                required: true
+      responses:
+        200:
+          description: data of user and token
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                readOnly: true
+              user:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                    description: auto genrated column
+                  firstName:
+                    type: string
+                    description: the user first name
+                  lastName:
+                    type: string
+                    description: the user last name
+                  email:
+                    type: string
+                    format: email
+                    description: the user email
+                  username:
+                    type: string
+                    description: the user username
+                  admin_id:
+                    type: string
+                    description: the admin id of active user
+                  created_at:
+                    type: string
+                    description: the time of create user row
+                  updated_at:
+                    type: string
+                    description: the time of update user row
+        404:
+          description: not exist user
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: server error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+  
+  /api/auth/user/out:
+    post:
+      summary: log user out
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            required: true
+      description: logout user
+      tags: [Login]
+      responses:
+        200:
+          description: ok
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

@@ -5,7 +5,6 @@ const controller = require('../controllers/adminController');
 // require middleware 
 const { Jwt, Permission } = require('../middleware');
 
-// route of get Admins
 route.get('/', [
     Jwt,
     Permission('admins:read')

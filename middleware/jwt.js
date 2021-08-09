@@ -32,11 +32,24 @@ const isAuthenticated = async (req, res ,next) => {
             let now = new Date();
             now.toISOString();
 
-            // 
-            const convertDate = moment(now).isAfter(new Date(data.logintime));
+            // date now is greate than logintime added to it expires in jwt token
+            const convertDate = moment(now)
+                .isAfter(moment(new Date(data.logintime).add(config.get('jwt.expiresin'))));
             console.log(now);
             console.log(data.expirin);
             console.log(convertDate);
+            // check if date now is greate than logintime added to it expires in jwt token
+            if (convertDate) {
+                // return status error and message in expires token login time
+                return res
+                    .status(401)
+                    .json({
+                        succesdatas: false,
+                        message: 'token you passed is expire'
+                    });  
+            }
+            // put token in req
+            req.token = token;
             // put data from decoded to req
             req.user = decoded;
         }catch(err){

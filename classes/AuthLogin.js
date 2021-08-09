@@ -179,7 +179,7 @@ class Auth {
      * @param {*} userId 
      * @param {*} token 
      */
-    static async logoutUser(userId, {token}){
+    static async logoutUser(userId, token){
         // init stat for response 
         let response = {};
         let statusCode = 200;

@@ -20,7 +20,7 @@ exports.loginAdmin = async (req, res) => {
 // export logoutUser function 
 exports.logoutUser = async (req, res) => {
     // pass request user and body to logoutUser function from class AuthLogin
-    const result = await AuthLogin.logoutUser(req.user.id, req.body);
+    const result = await AuthLogin.logoutUser(req.user.id, req.token);
     // pass result statusCode to response status and pass data response to json
     return res.status(result.statusCode).json(result.response);
 }
