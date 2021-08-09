@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "nodemon": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "config": "^3.3.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "jest": "^27.0.6",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.9",
     "moment": "^2.29.1",
