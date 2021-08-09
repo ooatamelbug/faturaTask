@@ -20,7 +20,7 @@ class Post {
             const skip = query.skip || 10;
 
             // get all data Posts and use limit and skip for pagenate it
-            const  data = await knex.select()
+            const  data = await knex.select("*")
                                     .from('posts')
                                     .limit(limit)
                                     .offset(skip);
@@ -47,7 +47,7 @@ class Post {
         let statusCode = 200;
         try {
             // get one Post data 
-            const  data = await knex.select()
+            const  data = await knex.select("*")
                                     .from('posts')
                                     .where('id' , PostId);
             // send data 
@@ -84,7 +84,8 @@ class Post {
             if (newPost){
                 // change status to 201 created and return data Post 
                 statusCode = 201;
-                response.data = newPost;
+                response.message = 'added';
+                
             }
         } catch (error) {
             // change status code to 500 server error and put message
@@ -109,7 +110,7 @@ class Post {
         let statusCode = 200
         try {
             // get data Post in Posts table
-            const Post = await knex.select()
+            const Post = await knex.select("*")
                                     .from('posts')
                                     .where('id', PostId)
                                     .where('user_id', userId).first();
@@ -157,7 +158,7 @@ class Post {
                 // loop of idPosts
                 idPosts.forEach( async (post, index) => {
                     // get data Post in Posts table
-                    const userData = await knex.select()
+                    const userData = await knex.select("*")
                                         .from('Posts')
                                         .where('id', post[index])
                                         .first();
@@ -206,7 +207,7 @@ class Post {
                 // loop of idPosts
                 await idPosts.forEach( async (post, index) => {
                     // get data Post in Posts table
-                    const PostsData = await knex.select()
+                    const PostsData = await knex.select("*")
                                     .from('Posts')
                                     .where('id', post[index])
                                     .first();

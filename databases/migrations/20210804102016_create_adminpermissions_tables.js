@@ -15,7 +15,7 @@ exports.up = function(knex) {
       .nullable()
       .onDelete('SET NULL')
       .onUpdate('SET NULL');
-    table.timestamp(true, true);
+    table.timestamp(false, true);
   });
 };
 

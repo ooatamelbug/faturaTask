@@ -16,7 +16,7 @@ class User {
             const skip = query.skip || 10;
 
             // get all data Users and use limit and skip for pagenate it
-            const  data = await knex.select()
+            const  data = await knex.select("*")
                                     .from('users')
                                     .limit(limit)
                                     .offset(skip);
@@ -43,7 +43,7 @@ class User {
         let statusCode = 200;
         try {
             // get one User data 
-            const  data = await knex.select()
+            const  data = await knex.select("*")
                                     .from('users')
                                     .where('id' , UserId);
             // send data 
@@ -85,7 +85,7 @@ class User {
             if (newUser){
                 // change status to 201 created and return data User 
                 statusCode = 201;
-                response.data = newUser;
+                response.message = 'new User ok';
             }
         } catch (error) {
             // change status code to 500 server error and put message
@@ -113,7 +113,7 @@ class User {
         let statusCode = 200
         try {
             // get data User in Users table
-            const User = await knex.select()
+            const User = await knex.select("*")
                                     .from('users')
                                     .where('id', UserId);
             // check if complete 
@@ -123,12 +123,12 @@ class User {
                 response.message = 'User is not found';
             } else {
                 // check if any User have the same username of updated data
-                const userNameExist = await knex.select()
+                const userNameExist = await knex.select("*")
                                     .from('users')
                                     .whereNot('id', UserId)
                                     .where('username', body.username);
 
-                const emailExist = await knex.select()
+                const emailExist = await knex.select("*")
                                     .from('users')
                                     .whereNot('id', UserId)
                                     .where('email', body.email);
@@ -141,7 +141,7 @@ class User {
                 } else {
                     // encrecpt password if it come from body
                     const encryptPassword = body.password ?
-                        bcryptjs.hash(body.password, 12) : User.password;
+                        await bcryptjs.hash(body.password, 12) : User.password;
                     
                     // reasgin password or put it into body request
                     body.password = encryptPassword;
@@ -183,7 +183,7 @@ class User {
                 const { status, idUsers } = body;
                 idUsers.forEach( async (user, index) => {
                     // get data User in Users table
-                    const userData = await knex.select()
+                    const userData = await knex.select("*")
                                         .from('Users')
                                         .where('id', user[index])
                                         .first();
@@ -232,7 +232,7 @@ class User {
                 // loop of idUsers
                 await idUsers.forEach( async (user, index) => {
                     // get data User in Users table
-                    const UsersData = await knex.select()
+                    const UsersData = await knex.select("*")
                                     .from('Users')
                                     .where('id', user[index])
                                     .first();

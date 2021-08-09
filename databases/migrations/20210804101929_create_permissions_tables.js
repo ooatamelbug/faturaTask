@@ -4,7 +4,7 @@ exports.up = function(knex) {
   return knex.schema.createTable('permissions', table => {
     table.increments();
     table.string('name').notNullable().unique();
-    table.timestamp(true, true);
+    table.timestamp(false, true);
   });
 };
 

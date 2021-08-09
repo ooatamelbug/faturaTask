@@ -5,7 +5,7 @@ const isPermission = permission => {
     return async (req, res, next) => {
         const adminId = req.user.id;
         // get admin data from admin table
-        const admin = await knex.select()
+        const admin = await knex.select("*")
                                 .from('admins')
                                 .where('id', adminId);
         // check if it has account
@@ -18,7 +18,7 @@ const isPermission = permission => {
                                         .from('adminpermissions AS ap')
                                         .innerJoin('permissions AS p', 'ap.permission_id', 'p.id')
                                         .where('ap.admin_id', adminId);
-                const permissionName = permissionForUser.map( name => permissionForUser.pname);
+                const permissionName = permissionForUser.map( permissionU => permissionU.pname);
                 // check if have this permission name
                 if (!permissionName.include(permission)){
                     return res

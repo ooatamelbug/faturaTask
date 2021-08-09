@@ -20,7 +20,7 @@ class Admin {
             const skip = query.skip || 10;
 
             // get all data admins and use limit and skip for pagenate it
-            const  data = await knex.select()
+            const  data = await knex.select("*")
                                     .from('admins')
                                     .limit(limit)
                                     .offset(skip);
@@ -45,7 +45,7 @@ class Admin {
         let statusCode = 200;
         try {
             // get one admin data 
-            const  data = await knex.select()
+            const  data = await knex.select("*")
                                     .from('admins')
                                     .where('id' , adminId);
             // send data 
@@ -75,7 +75,7 @@ class Admin {
         let statusCode = 200
         try {
             // encrecpt password
-            const encryptPassword = bcryptjs.hash(body.password, 12);
+            const encryptPassword = await bcryptjs.hash(body.password, 12);
         
             // reasgin password or put it into body request
             body.password = encryptPassword;
@@ -86,7 +86,7 @@ class Admin {
             if (newAdmin){
                 // change status to 201 created and return data admin 
                 statusCode = 201;
-                response.data = newAdmin;
+                response.message = 'added';
             }
         } catch (error) {
             // change status code to 500 server error and put message
@@ -113,7 +113,7 @@ class Admin {
         let statusCode = 200
         try {
             // get data admin in admins table
-            const admin = await knex.select()
+            const admin = await knex.select("*")
                                     .from('admins')
                                     .where('id', adminId);
             // check if complete 
@@ -123,7 +123,7 @@ class Admin {
                 response.message = 'admin is not found';
             } else {
                 // check if any admin have the same username of updated data
-                const adminUserName = await knex.select()
+                const adminUserName = await knex.select("*")
                                     .from('admins')
                                     .whereNot('id', adminId)
                                     .where('username', body.username);
@@ -136,7 +136,7 @@ class Admin {
                 } else {
                     // encrecpt password if it come from body
                     const encryptPassword = body.password ?
-                        bcryptjs.hash(body.password, 12) : admin.password;
+                        await bcryptjs.hash(body.password, 12) : admin.password;
                     
                     // reasgin password or put it into body request
                     body.password = encryptPassword;
@@ -180,7 +180,7 @@ class Admin {
                 idAdmins.forEach( async (admin, index) => {
 
                     // get data admin in admins table
-                    const adminsData = await knex.select()
+                    const adminsData = await knex.select("*")
                                         .from('admins')
                                         .where('id', admin[index])
                                         .first();
@@ -229,7 +229,7 @@ class Admin {
                 // loop of idAdmins
                 await idAdmins.forEach( async (admin, index) => {
                     // get data admin in admins table
-                    const adminsData = await knex.select()
+                    const adminsData = await knex.select("*")
                                     .from('admins')
                                     .where('id', admin[index])
                                     .first();

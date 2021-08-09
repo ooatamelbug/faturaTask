@@ -28,14 +28,14 @@ class Auth {
             // check if request body have or contain one username or email 
             if(username && !email) {
                 // get data of user by username
-                const userData = knex.select().from('users').where('username', username).first();
+                const userData = knex.select("*").from('users').where('username', username).first();
                 // append userData to user viriable
                 user = userData;
                 // append to col viriable what column have get data on it
                 col = 'username';
             } else {
                 // get data of user by email
-                const userData = knex.select().from('users').where('email', email).first();
+                const userData = knex.select("*").from('users').where('email', email).first();
                 // append userData to user viriable
                 user = userData;
                 // append to col viriable what column have get data on it
@@ -48,7 +48,7 @@ class Auth {
                 response.message = `no data for this user please check true ${col}`;
             }
             // verify Password and compare two password from user and request
-            const verifyPassword = bcryptjs.compare(password, user.password);
+            const verifyPassword = await bcryptjs.compare(password, user.password);
             // check if is two password is matched 
             if(!verifyPassword){
                 // change status to 404 not found and return message error 
@@ -108,7 +108,7 @@ class Auth {
             // check if request body have or contain one username or email 
             if(username) {
                 // get data of user by username
-                const userData = knex.select()
+                const userData = knex.select("*")
                                     .from('admins')
                                     .where('username', username)
                                     .first();
@@ -122,7 +122,7 @@ class Auth {
                 response.message = `no data for this user please check true username`;
             }
             // verify Password and compare two password from user and request
-            const verifyPassword = bcryptjs.compare(password, user.password);
+            const verifyPassword = await bcryptjs.compare(password, user.password);
             // check if is two password is matched 
             if(!verifyPassword){
                 // change status to 404 not found and return message error 
@@ -185,7 +185,7 @@ class Auth {
         let statusCode = 200;
         try {
             // get data of data by userId and token from authlogin
-            const userData = knex.select()
+            const userData = knex.select("*")
                 .from('authlogin')
                 .where('tablename', 'users')
                 .where('user_id', userId)
@@ -233,7 +233,7 @@ class Auth {
         let statusCode = 200;
         try {
             // get data of data by adminId and token from authlogin
-            const userData = knex.select()
+            const userData = knex.select("*")
                 .from('authlogin')
                 .where('tablename', 'admins')
                 .where('admin_id', adminId)

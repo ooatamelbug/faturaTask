@@ -18,7 +18,7 @@ class Permission {
             const skip = query.skip || 10;
 
             // get all data Permissions and use limit and skip for pagenate it
-            const  data = await knex.select()
+            const  data = await knex.select("*")
                                     .from('permissions')
                                     .limit(limit)
                                     .offset(skip);
@@ -45,7 +45,7 @@ class Permission {
         let statusCode = 200;
         try {
             // get one Permission data 
-            const  data = await knex.select()
+            const  data = await knex.select("*")
                                     .from('adminpermissions')
                                     .where('admin_id' , adminId);
             // send data 
@@ -71,12 +71,12 @@ class Permission {
         try {
             body.name = body.name.replace(/ /g, ':');
             // insert data new permission in permissions table
-            const newPost = await knex('permissions').insert(body);
+            const newPermission = await knex('permissions').insert(body);
             // check if complete 
-            if (newPost){
+            if (newPermission){
                 // change status to 201 created and return data Post 
                 statusCode = 201;
-                response.data = newPost;
+                response.message = 'added';
             }
         } catch (error) {
             // change status code to 500 server error and put message
@@ -117,6 +117,8 @@ class Permission {
                         resolve({statusCode ,response});
                     }
                 })
+                statusCode = 201;
+                response.message = 'added';
                 resolve({statusCode ,response});
                 
             } catch (error) {
@@ -141,7 +143,7 @@ class Permission {
         let statusCode = 200
         try {
             // get data Permission in Permissions table
-            const permission = await knex.select()
+            const permission = await knex.select("*")
                                     .from('permissions')
                                     .where('id', permissionId).first();
             // check if complete 
@@ -201,6 +203,8 @@ class Permission {
                         resolve({statusCode ,response});
                     }
                 })
+                statusCode = 200;
+                response.message = 'updated';
                 resolve({statusCode ,response});
                 
             } catch (error) {
@@ -227,7 +231,7 @@ class Permission {
                 // loop of idPermissions
                 await idPermissions.forEach( async (permission, index) => {
                     // get data Permission in Permissions table
-                    const PermissionsData = await knex.select()
+                    const PermissionsData = await knex.select("*")
                                     .from('Permissions')
                                     .where('id', permission[index])
                                     .first();
@@ -251,6 +255,8 @@ class Permission {
                     }
                 });
                 // return resolve data from Promise
+                statusCode = 200;
+                response.message = 'deleted';
                 resolve({statusCode, response});
             } catch (error) {
                 // change status code to 500 server error and put message
@@ -278,7 +284,7 @@ class Permission {
                 // loop of idPermissions
                 await idPermissions.forEach( async (permission, index) => {
                     // get data Permission in Permissions table
-                    const PermissionsData = await knex.select()
+                    const PermissionsData = await knex.select("*")
                                     .from('adminpermissions')
                                     .where('admin_id', adminId)
                                     .where('permission_id', permission[index])

@@ -7,14 +7,14 @@ const knex = require('../databases/knex');
 
 const isAuthenticated = async (req, res ,next) => {
     // get token from header
-    const token = req.headers.Autherization;
+    const token = req.headers.Autherization ? req.headers.Autherization.split(' ')[1] : null;
     // check if it has token
     if (token){
         try{
             // verify token to sure if give user data
             const decoded = await jwt.verify(token, secret);
             // sure if this user make logout from system before
-            const data = await knex.select()
+            const data = await knex.select("*")
                             .from('authlogin')
                             .where('token', token);
             //sure if this token is have logout time
