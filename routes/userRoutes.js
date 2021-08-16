@@ -4,6 +4,8 @@ const route = require('express').Router();
 const controller = require('../controllers/userController');
 // require middleware 
 const { Jwt, Permission } = require('../middleware');
+// require validations
+const validate = require('../validations/user');
 
 // route of get all Users
 route.get('/', [
@@ -18,7 +20,9 @@ route.get('/:id', [
 ], controller.getOneUser);
 
 // route of create Users
-route.post('/register', controller.registerUser);
+route.post('/register',[], [
+    validate.userRegister('body')
+], controller.registerUser);
 
 // route of update Users
 route.put('/update/:userid', [
