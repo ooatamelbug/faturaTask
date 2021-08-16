@@ -20,9 +20,9 @@ route.get('/:id', [
 ], controller.getOneUser);
 
 // route of create Users
-route.post('/register',[], [
-    validate.userRegister('body')
-], controller.registerUser);
+route.post('/register',[], 
+    validate.userRegister('body'),
+        controller.registerUser);
 
 // route of update Users
 route.put('/update/:userid', [
