@@ -5,7 +5,7 @@ exports.up = function(knex) {
     table.increments();
     table.string('tablename').notNullable();
     table.datetime('expirin').notNullable();
-    table.string('token').notNullable().unique();
+    table.text('token').notNullable().unique();
     table.datetime('logintime').notNullable();
     table.datetime('logouttime').nullable();
     table.integer('admin_id')
@@ -21,7 +21,7 @@ exports.up = function(knex) {
       .onDelete('SET NULL')
       .onUpdate('SET NULL');    
     table.boolean('status').notNullable().default(true);
-    table.timestamp(false, true);
+    table.timestamp(true, true);
   });
 };
 

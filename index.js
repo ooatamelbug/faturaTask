@@ -30,10 +30,11 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // require router
-require('./utils/router')(app);
+require('./start/router')(app);
 
 // use SwaggerUI to route
 app.use('/api-docs',SwaggerUI.serve, SwaggerUI.setup(options));
+
 // create admin if not exist
 async function createAdmin (){
     const admin = await knex.select("*")
@@ -53,6 +54,20 @@ async function createAdmin (){
     }
 };
 
+// error handle
+app.use( (error, req, res, next) => {
+    // handel status Code number
+    const status = req.statusCode || 500;
+    // handel message error
+    const message = error.message;
+    // handel data error
+    const data = error.data;
+    // push status, message and data
+    res.status(status).json({
+        message,
+        data
+    });
+});
 
 // listen to port and run app
 app.listen(port, () => {

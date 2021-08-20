@@ -1,6 +1,7 @@
 // require knex file 
-const knex = require('../knexfile');
-const knexInvironment = require('knex')[knex.development];
+// const knexfile = require('../knexfile');
+// const knexInvironment = require('knex')[knexfile.development];
+const knex = require('../databases/knex');
 // require jwt 
 const jwt = require('jsonwebtoken');
 // require bcryptjs 
@@ -28,18 +29,29 @@ class Auth {
             // check if request body have or contain one username or email 
             if(username && !email) {
                 // get data of user by username
-                const userData = knex.select("*").from('users').where('username', username).first();
+                const userData = await knex.select("*")
+                                    .from('users')
+                                    .where('username', username)
+                                    .first();
                 // append userData to user viriable
-                user = userData;
-                // append to col viriable what column have get data on it
-                col = 'username';
+                if (userData) { 
+                    user = userData;
+                    // append to col viriable what column have get data on it
+                    col = 'username';
+                }
+                else throw new Error('error no user')
             } else {
                 // get data of user by email
-                const userData = knex.select("*").from('users').where('email', email).first();
-                // append userData to user viriable
-                user = userData;
-                // append to col viriable what column have get data on it
-                col = 'email';
+                const userData = await knex.select("*")
+                                    .from('users')
+                                    .where('email', email)
+                                    .first();
+                if (userData) { 
+                    user = userData;
+                    // append to col viriable what column have get data on it
+                    col = 'username';
+                }
+                else throw new Error('error no user')
             }
             // check if user is empty or not 
             if (!user) {
@@ -62,22 +74,26 @@ class Auth {
                         expiresIn: config.get('jwt.expiresin')
                     });
                 
-                // change formate date time and clac expirin time
-                let logintime = moment(new Date()).utc().format();
-                let expirin = moment(new Date()).add(config.get('jwt.expiresin'),'hours');
-                expirin.utc().format();
+            // change formate date time and clac expirin time
+                let logintime = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
+                let expirin = moment(new Date())
+                            .add(parseInt(config.get('jwt.expiresin')),'hours')
+                            .utc().format('YYYY-MM-DD HH:mm:ss');
+                console.log(expirin)
                 // insert data login in authlogin 
+                console.log(logintime)
                 const logauth = await knex('authlogin').insert({
                     'tablename': 'users',
                     'token': token,
                     'expirin': expirin,
                     'logintime': logintime,
-                    'logouttime': NULL,
+                    'logouttime': null,
                     'user_id': user.id,
-                    'admin_id': NULL,
+                    'admin_id': null,
                     'status': true
                 });
 
+                console.log(logauth)
                 // return status code and response message
                 statusCode = 200;
                 delete user.password;
@@ -86,6 +102,7 @@ class Auth {
         }catch (error) {
             // change status code to 500 server error and put message
             statusCode = 500;
+            response.data = error;
             response.message = 'error in data';
         }
         // return status code and response data
@@ -108,7 +125,7 @@ class Auth {
             // check if request body have or contain one username or email 
             if(username) {
                 // get data of user by username
-                const userData = knex.select("*")
+                const userData = await knex.select("*")
                                     .from('admins')
                                     .where('username', username)
                                     .first();
@@ -137,28 +154,29 @@ class Auth {
                     });
                 
                 // change formate date time and clac expirin time
-                let logtime = knexInvironment.fn.now();
+                // let logtime = knexInvironment.fn.now();
                 // or 
                 let logtimed = new Date().toISOString();
                 // or
-                let logintime = moment(new Date()).utc().format();
-                let expirin = moment(new Date()).add(config.get('jwt.expiresin'),'hours');
-                expirin.utc().format();
-                console.log(logtime);
+                let logintime = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
+                let expirin = moment(new Date())
+                        .add(parseInt(config.get('jwt.expiresin')),'hours')
+                        .utc().format('YYYY-MM-DD HH:mm:ss');
+                // console.log(logtime);
                 console.log(logtimed);
                 console.log(logintime);
                 console.log(expirin);
                 // insert data login in authlogin 
-                // const logauth = await knex('authlogin').insert({
-                //     'tablename': 'admins',
-                //     'token': token,
-                //     'expirin': expirin,
-                //     'logintime': logintime,
-                //     'logouttime': NULL,
-                //     'user_id': NULL,
-                //     'admin_id': admin.id,
-                //     'status': true
-                // });
+                const logauth = await knex('authlogin').insert({
+                    'tablename': 'admins',
+                    'token': token,
+                    'expirin': expirin,
+                    'logintime': logintime,
+                    'logouttime': null,
+                    'user_id': null,
+                    'admin_id': admin.id,
+                    'status': true
+                });
 
                 // return status code and response message
                 statusCode = 200;

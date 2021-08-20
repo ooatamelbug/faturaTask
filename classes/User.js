@@ -5,7 +5,11 @@ const bcryptjs = require('bcryptjs');
 
 // create class User for all User operations
 class User {
-     
+    
+    /**
+     * 
+     * @param {limit, skip } query 
+     */ 
     static async getUsers(query) {
         // init stat for response 
         let response = {};
@@ -74,18 +78,33 @@ class User {
         let statusCode = 200
         try {
             // encrecpt password
-            const encryptPassword = bcryptjs.hash(body.password, 12);
+            const encryptPassword = await bcryptjs.hash(body.password, 12);
         
             // reasgin password or put it into body request
             body.password = encryptPassword;
-
-            // insert data new User in Users table
-            const newUser = await knex('users').insert(body);
-            // check if complete 
-            if (newUser){
-                // change status to 201 created and return data User 
-                statusCode = 201;
-                response.message = 'new User ok';
+            // select user id if is exist by User username or email
+            const existUser = await knex.select('id').from('users')
+                            .where('username', body.username)
+                            .orWhere('email', body.email)
+                            .first();
+            // check if existUser
+            if(existUser){
+                // change status to 403 and return error 
+                statusCode = 403;
+                response.message = 'exist User';
+            }else {            
+                // insert data new User in Users table
+                const newUser = await knex('users').insert(body);
+                // check if complete 
+                if (newUser){
+                    // change status to 201 created and return data User 
+                    statusCode = 201;
+                    response.message = 'new User ok';
+                }else {
+                    // change status to 500 and return error 
+                    statusCode = 500;
+                    response.error = newUser.error;
+                }
             }
         } catch (error) {
             // change status code to 500 server error and put message

@@ -3,9 +3,9 @@ const route = require('express').Router();
 // require user controller 
 const controller = require('../controllers/userController');
 // require middleware 
-const { Jwt, Permission } = require('../middleware');
+const { Jwt, Permission, Validate } = require('../middleware');
 // require validations
-const validate = require('../validations/user');
+const validateUser = require('../validations/user');
 
 // route of get all Users
 route.get('/', [
@@ -16,17 +16,23 @@ route.get('/', [
 // route of get one Users
 route.get('/:id', [
     Jwt,
-    Permission('users:read')
-], controller.getOneUser);
+    Permission('users:read'),
+    validateUser.userId,
+    Validate 
+] , controller.getOneUser);
 
 // route of create Users
-route.post('/register',[], 
-    validate.userRegister('body'),
-        controller.registerUser);
+route.post('/register',[
+    validateUser.userRegister,
+    Validate
+],controller.registerUser);
 
 // route of update Users
 route.put('/update/:userid', [
-    Jwt
+    Jwt,
+    validateUser.userUpdate,
+    validateUser.userId ,
+    Validate
 ], controller.updateUser);
 
 // route of active Users
